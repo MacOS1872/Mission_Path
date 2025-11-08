@@ -4,11 +4,9 @@
 
 package com.mycompany.missiontracker;
 
-import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.stage.Stage;
-
+import static spark.Spark.*;
+import com.google.gson.Gson;
+import java.util.*;
 /**
  *
  * @author mac
@@ -16,6 +14,13 @@ import javafx.stage.Stage;
 public class MissionTracker {
 
     public static void main(String[] args) {
-        System.out.println("Held!");
+        port(4567); // optional, default is 4567
+
+        get("/", (req, res) -> "Hello from Spark Java!");
+
+        get("/missions", (req, res) -> {
+            res.type("application/json");
+            return "[{\"name\":\"Apollo 11\",\"destination\":\"Moon\"}]";
+        });
     }
 }
