@@ -14,16 +14,23 @@ import java.util.*;
 public class MissionTracker {
 
     static class Mission {
-        String name;
+        String key;        
+        String name;      
         String destination;
         String launchDate;
+        String summary;
 
-        Mission(String n, String d, String date) {
-            name = n;
-            destination = d;
-            launchDate = date;
+        Mission(String key, String name, String dest, String date, String summary) {
+            
+            this.key = key;
+            this.name = name;
+            this.destination = dest;
+            this.launchDate = date;
+            this.summary = summary;
+        
         }
     }
+
 
     public static void main(String[] args) {
         port(4567);
@@ -32,8 +39,14 @@ public class MissionTracker {
         staticFiles.location("/public");
         
         List<Mission> missions = new ArrayList<>();
-        missions.add(new Mission("Apollo 11", "Moon", "1969-07-16"));
-        missions.add(new Mission("Artemis I", "Moon", "2022-11-16"));
+        missions.add(new Mission("apollo11", "Apollo 11", "Moon", "1969-07-16", "First manned moon landing."));
+        missions.add(new Mission("voyager1", "Voyager 1", "Interstellar Space", "1977-09-05", "Farthest human-made object."));
+        missions.add(new Mission("mars2020", "Mars 2020", "Mars", "2020-07-30", "Mars rover mission to Jezero Crater."));
+        missions.add(new Mission("hubble", "Hubble Telescope", "Earth orbit", "1990-04-24", "Space telescope orbiting Earth."));
+        missions.add(new Mission("juno", "Juno Mission", "Jupiter", "2011-08-05", "Jupiter exploration probe."));
+
+
+
 
         Gson gson = new Gson();
 
@@ -43,16 +56,20 @@ public class MissionTracker {
         });
 
         get("/mission/:name", (req, res) -> {
-            String missionName = req.params(":name").toLowerCase();
+            String missionKey = req.params(":name").toLowerCase();
             for (Mission m : missions) {
-                if (m.name.toLowerCase().equals(missionName)) {
-                    res.type("application/json");
-                    return gson.toJson(m);
-                }
+                if (m.key.equals(missionKey)) {   // compare to key
+                res.type("application/json");
+                return gson.toJson(m);
             }
-            res.status(404);
-            return "Mission not found";
+        }
+        res.status(404);
+        return "Mission not found";
         });
+
+        
+        
+
     }
     
 }
