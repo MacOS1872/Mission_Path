@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>MissionPath</title>
+</head>
+<body>
+  <h1>Space Missions</h1>
+  <button onclick="getMission('apollo11')">Apollo 11</button>
+  <button onclick="getMission('voyager1')">Voyager 1</button>
+  <button onclick="getMission('artemis1')">Artemis I</button>
+
+  <div id="missionData"></div>
+
+  <script>
+    function getMission(name) {
+      fetch('/mission/' + name)
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('missionData').innerHTML =
+            `<h2>${data.name}</h2>
+             <p>Destination: ${data.destination}</p>
+             <p>Year: ${data.year}</p>
+             <p>${data.summary}</p>`;
+        })
+        .catch(error => console.error('Error:', error));
+    }
+  </script>
+</body>
+</html>
