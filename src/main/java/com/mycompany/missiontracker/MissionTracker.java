@@ -11,6 +11,6 @@ package com.mycompany.missiontracker;
 public class MissionTracker {
 
     public static void main(String[] args) {
-        System.out.println("Helo World!");
+        System.out.println("HeloWorld!");
     }
 }
