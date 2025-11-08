@@ -13,14 +13,46 @@ import java.util.*;
  */
 public class MissionTracker {
 
-    public static void main(String[] args) {
-        port(4567); // optional, default is 4567
+    static class Mission {
+        String name;
+        String destination;
+        String launchDate;
 
-        get("/", (req, res) -> "Hello from Spark Java!");
+        Mission(String n, String d, String date) {
+            name = n;
+            destination = d;
+            launchDate = date;
+        }
+    }
+
+    public static void main(String[] args) {
+        port(4567);
+
+        // Tell Spark where to find HTML, CSS, JS
+        staticFiles.location("/public");
+        
+        List<Mission> missions = new ArrayList<>();
+        missions.add(new Mission("Apollo 11", "Moon", "1969-07-16"));
+        missions.add(new Mission("Artemis I", "Moon", "2022-11-16"));
+
+        Gson gson = new Gson();
 
         get("/missions", (req, res) -> {
             res.type("application/json");
-            return "[{\"name\":\"Apollo 11\",\"destination\":\"Moon\"}]";
+            return gson.toJson(missions);
+        });
+
+        get("/mission/:name", (req, res) -> {
+            String missionName = req.params(":name").toLowerCase();
+            for (Mission m : missions) {
+                if (m.name.toLowerCase().equals(missionName)) {
+                    res.type("application/json");
+                    return gson.toJson(m);
+                }
+            }
+            res.status(404);
+            return "Mission not found";
         });
     }
+    
 }
