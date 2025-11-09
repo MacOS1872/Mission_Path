@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const svgNS = "http://www.w3.org/2000/svg";
 
-  // Mission data (kept from your backend, with features from frontend)
+  // Mission data 
   const missions = [
     {
       id: 'apollo11',
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   ];
 
-  // DOM refs (matching your backend)
+  // DOM refs 
   const missionButtonsDiv = document.getElementById('missionButtons');
   const missionInfo = document.getElementById('missionData'); // kept backend name
   const canvas = document.getElementById('canvas');
@@ -73,8 +73,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const destinationsGroup = document.getElementById('destinations');
   const earthCoords = { x: 600, y: 300 };
 
-  // Animation state (multiple ships supported)
-  let activeShips = [];          // array of {mission, elShip, elTrail, pathEl, progress, ...}
+  // Animation state 
+  let activeShips = [];          
   let animationFrame = null;
   let lastTimestamp = null;
 
@@ -83,10 +83,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ----------------------
   // Create destination planet images & labels
-  // (This preserves backend behavior but skips planets when none specified)
   // ----------------------
   missions.forEach(m => {
-    // If there's no planetImg, still create a label so user knows which mission is there.
+    // If there's no planetImg, still create a label so we know which mission is there.
     const g = document.createElementNS(svgNS, 'g');
     g.setAttribute('class', 'destination-group');
     g.setAttribute('transform', `translate(${m.dest.x}, ${m.dest.y})`);
@@ -115,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ----------------------
-  // Utility: build cubic Bezier arc path
+  // build cubic Bezier arc path
   // ----------------------
   function buildArcPath(dest, liftOverride = null) {
     const mx = (earthCoords.x + dest.x) / 2;
@@ -132,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ----------------------
-  // Apollo 11 custom path (smooth short-range Bezier)
+  // Apollo 11 custom path
   // ----------------------
   function buildApollo11Path() {
     const start = earthCoords;
@@ -143,7 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ----------------------
-  // Cleanup all ships (remove ship elements & trails but *keep* planet images & buttons)
+  // Cleanup all ship
   // ----------------------
   function cleanupAllShips() {
     activeShips.forEach(s => {
@@ -161,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ----------------------
   // Create a ship + trail + path for a mission
-  // speedMultiplier (not used everywhere) and superMode toggle
+  // speedMultiplier and superMode toggle
   // ----------------------
   function createShip(mission, speedMultiplier = 1, superMode = false) {
     // Create path element describing the route (used for both ship motion and trail)
@@ -170,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
     pathEl.setAttribute('stroke', 'transparent');
 
     if (mission.id === 'hubble') {
-      // circular path used for trail (start at center)
+      // circular path used for trail
       const r = 90;
       const cx = earthCoords.x;
       const cy = earthCoords.y;
@@ -204,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Append path to SVG
     pathsGroup.appendChild(pathEl);
 
-    // Create trail (stroke dashed) from same path
+    // Create trail from same path
     const trail = document.createElementNS(svgNS, 'path');
     trail.setAttribute('d', pathEl.getAttribute('d'));
     trail.setAttribute('fill', 'none');
@@ -212,8 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
     trail.setAttribute('stroke-width', 2);
     trail.setAttribute('stroke-linecap', 'round');
     trail.setAttribute('stroke-dasharray', '8 8');
-    // initialize dashoffset to hide stroke, will be animated
-    // Important: must use getTotalLength AFTER the element is inserted into the DOM
+    // dashoffset to hide stroke, animated
     trail.style.strokeDashoffset = pathEl.getTotalLength();
     pathsGroup.appendChild(trail);
 
@@ -226,7 +224,7 @@ document.addEventListener('DOMContentLoaded', () => {
     shipImg.setAttribute('x', -37);
     shipImg.setAttribute('y', -37);
     shipImg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
-    // give an SVG-friendly class for any CSS
+    // SVG-friendly class
     shipImg.classList.add('ship-image');
     shipsGroup.appendChild(shipImg);
 
@@ -244,7 +242,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     activeShips.push(shipObj);
 
-    // Ensure animation loop is running
+    // animation loop is running
     if (!animationFrame) {
       lastTimestamp = null;
       animationFrame = requestAnimationFrame(animateShips);
@@ -302,7 +300,7 @@ document.addEventListener('DOMContentLoaded', () => {
           if (s.elTrail) s.elTrail.style.strokeDashoffset = totalLength; // reset trail
         }
 
-        // Otherwise if not super mode, loop at end of path
+        // if not super mode, loop at end of path
         if (!s.superMode && s.progress >= 1) {
           s.progress = 0;
           if (s.elTrail) s.elTrail.style.strokeDashoffset = totalLength;
@@ -320,7 +318,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (s.elTrail) s.elTrail.style.strokeDashoffset = totalLength * (1 - s.progress);
       }
 
-      // DEFAULT: generic missions follow their path looping
+      // generic missions follow their path looping
       else {
         s.progress += delta / (s.superMode ? 2000 : 10000);
         if (s.progress > 1) s.progress = 0;
@@ -340,10 +338,9 @@ document.addEventListener('DOMContentLoaded', () => {
     animationFrame = requestAnimationFrame(animateShips);
   }
 
-  // ----------------------
-  // Handle mission click: fetch backend info THEN start animation for that mission
-  // (keeps your backend priority)
-  // ----------------------
+ 
+  // fetch backend info THEN start animation for that mission
+
   function handleMissionClick(missionId, missionObj) {
     // fetch textual data from backend endpoint
     fetch('/mission/' + missionId)
@@ -367,13 +364,13 @@ document.addEventListener('DOMContentLoaded', () => {
         missionInfo.innerHTML = `<h2>${missionObj.name}</h2><p>${missionObj.desc}</p>`;
       });
 
-    // Start SVG animation for that mission (clean single-launch behavior)
+    // Start SVG animation for that mission
     cleanupAllShips();
     createShip(missionObj, 1, false);
   }
 
   // ----------------------
-  // Build the mission buttons (preserve backend behavior)
+  // Build the mission buttons
   // ----------------------
   missions.forEach(m => {
     const btn = document.createElement('button');
@@ -387,9 +384,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ----------------------
-  // Secret super-launch button (works anytime)
-  // - does not remove mission buttons or planet images
-  // - cleans up existing ships/trails then launches all ships in super mode
+  // Secret super-launch button
   // ----------------------
   const secretBtn = document.createElement('button');
   secretBtn.style.position = 'fixed';
@@ -404,10 +399,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   document.body.appendChild(secretBtn);
 
-  // ----------------------
-  // Helpful CSS suggestion for pixel art images (optional but recommended).
-  // If you have a stylesheet, add these rules; otherwise you can inject them here.
-  // ----------------------
   (function injectPixelCSS() {
     const css = `
       /* keep pixel art crisp inside the SVG */
@@ -423,4 +414,4 @@ document.addEventListener('DOMContentLoaded', () => {
     document.head.appendChild(style);
   })();
 
-}); // DOMContentLoaded end
+});
