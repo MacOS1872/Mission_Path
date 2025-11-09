@@ -1,3 +1,11 @@
+/* Name: Israel Reynolds, Mac Weisbrod
+ * Created: 11/7/2025
+ * File: script.js
+ * Description: This javascript file powers select mission objects by creating
+ * special spacemissions and their destinations. Placed in an SVG for animation, 
+ * our spaceships travel along mission paths(SVG path strings). The buttons launch 
+ * individual space missions and in the bottom right corner is a special launch control.
+ */
 document.addEventListener('DOMContentLoaded', () => {
 
   const svgNS = "http://www.w3.org/2000/svg";
