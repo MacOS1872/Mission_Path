@@ -3,8 +3,23 @@
   --bg:#030417;--accent:#9be2ff;--muted:#9aa9bf;
   --card:rgba(255,255,255,0.03);--radius:12px;
 }
+
 *{box-sizing:border-box}
+
+h2 {
+    font-size: 2.2rem;
+    color: var(--accent);
+}
+
+h1 {
+    color: var(--accent);
+}
+p {
+    font-size: 1.8rem;
+    color: var(--accent);
+}
 body {
+    
   margin: 0;
   font-family: Inter, system-ui, "Segoe UI", Roboto, Arial, sans-serif;
   background: linear-gradient(#020417,#000);
@@ -15,14 +30,18 @@ body {
   min-height: 100vh;
   padding-bottom: 2rem;
 }
+
 header {
+    
   max-width: 1200px;
   padding: 18px;
   text-align: center;
   font-weight: 700;
   font-size: 1.5rem;
 }
+
 main {
+    
   max-width: 1200px;
   width: 100%;
   padding: 12px;
@@ -74,7 +93,7 @@ svg {
   justify-content: center;
   margin-bottom: 12px;
   user-select: none;
-  max-width: 800px;
+  max-width: 1200px;
 }
 button.mission-btn {
   background: transparent;
@@ -82,10 +101,11 @@ button.mission-btn {
   color: var(--accent);
   border-radius: 20px;
   font-weight: 600;
-  padding: 8px 20px;
+  padding: 20px 32px;
   cursor: pointer;
   transition: background 0.25s ease, color 0.25s ease;
   white-space: nowrap;
+  font-size: 1.5rem;
 }
 button.mission-btn:hover,
 button.mission-btn:focus {
@@ -100,8 +120,9 @@ button.mission-btn[aria-pressed="true"] {
 }
 
 /* Mission info panel */
-#missionInfo {
-  max-width: 800px;
+#missionData {
+  width: 90%;
+  max-width: none;
   background: rgba(255 255 255 / 0.05);
   border-radius: var(--radius);
   padding: 16px;
@@ -112,7 +133,8 @@ button.mission-btn[aria-pressed="true"] {
   line-height: 1.4;
   text-align: center;
   min-height: 108px;
-  margin-top: 10px;
+  margin-top: 15px;
+  margin-bottom: 15px;
   transition: opacity 0.3s ease;
 }
 
@@ -159,8 +181,8 @@ path.trail {
   #missionButtons {
     max-width: 100%;
   }
-  #missionInfo {
-    max-width: 100%;
+  #missionData {
+    /*max-width: 100%;*/
   }
 }
 footer {
