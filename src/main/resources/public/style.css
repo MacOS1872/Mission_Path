@@ -1,4 +1,9 @@
-
+/* Name: Israel Reynolds, Mac Weisbrod
+ * Created: 11/7/2025
+ * File: style.css
+ * Description: This style sheet creates a space-like background and
+ * styles spaceships, planets, and buttons for the Mission Path project.
+ */
 :root{
   --bg:#030417;--accent:#9be2ff;--muted:#9aa9bf;
   --card:rgba(255,255,255,0.03);--radius:12px;
